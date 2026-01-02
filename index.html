@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>BD Media Hub | All-in-One Portal</title>
+    <meta name="title" content="BD Media Hub | All-in-One News Portal">
+    <meta name="description" content="Read all Bangladeshi newspapers, online news portals, English dailies, and e-papers in one place. Access Prothom Alo, Daily Star, and international news instantly at BD Media Hub.">
+    <meta name="keywords" content="Bangla Newspaper, BD News, Online News Portal, All Bangla Newspaper, ePaper, BD Media Hub, Prothom Alo, Daily Star, Bengali News, Bangladesh News">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="author" content="BD Media Hub">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rjtanjid24.github.io/"> <meta property="og:title" content="BD Media Hub | All-in-One News Portal">
+    <meta property="og:description" content="One-stop platform for all Bangladeshi Newspapers, TV Channels, and International Media links.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=BD+Media+Hub"> <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://rjtanjid24.github.io/"> <meta property="twitter:title" content="BD Media Hub | All-in-One News Portal">
+    <meta property="twitter:description" content="Read all Bangladeshi newspapers and online news portals in one place.">
+    <meta property="twitter:image" content="https://via.placeholder.com/1200x630.png?text=BD+Media+Hub">
+
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2537/2537926.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f3f4f6; }
+        .media-card { transition: all 0.2s ease-in-out; }
+        .media-card:hover { transform: translateY(-3px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .logo-box { width: 20px; height: 20px; object-fit: contain; }
+        
+        .box-layout-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: white;
+            min-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            .box-layout-container { margin: 0; border-radius: 0; width: 100%; }
+            .nav-menu { justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+            .logo-box { width: 16px; height: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box-layout-container">
+        
+        <header class="bg-emerald-900 text-white p-6 shadow-md">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <div class="text-center md:text-left">
+                    <h1 class="text-2xl md:text-3xl font-bold flex items-center justify-center md:justify-start">
+                        <i class="fas fa-newspaper mr-3"></i>BD Media Hub
+                    </h1>
+                    <p class="text-xs text-emerald-100 opacity-80 mt-1">Your Gateway to Global & Local News</p>
+                </div>
+            <nav>
+                    <ul class="flex space-x-6 text-sm font-medium bg-emerald-800/50 px-6 py-2 rounded-full border border-emerald-700/50 backdrop-blur-sm">
+                        <li><a href="index.html" class="hover:text-emerald-200 transition flex items-center"><i class="fas fa-home mr-2"></i>Home</a></li>
+                        <li><a href="mail.html" class="text-emerald-200 flex items-center"><i class="fas fa-address-book mr-2"></i>Media Contact Directory</a></li>
+                        <li><a href="https://forms.gle/48dndg9XrDGk8JSr5" class="text-emerald-200 flex items-center"><i class="fas fa-address-book mr-2"></i>Submit Newspaper</a></li>
+                    </ul>
+                </nav>
+
+            </div>
+
+            <div class="max-w-xl mx-auto relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="পত্রিকা খুঁজুন (যেমন: Prothom Alo, Daily Star)..." 
+                    class="w-full py-3 pl-10 pr-4 text-gray-800 bg-white border-none rounded-full focus:ring-2 focus:ring-emerald-400 shadow-lg placeholder-gray-400">
+            </div>
+        </header>
+
+        <main class="flex-grow p-4 md:p-8 space-y-10 bg-white" id="main-content">
+            <div class="text-center text-gray-400 mt-10">Loading newspapers...</div>
+        </main>
+
+        <footer class="bg-gray-100 text-center py-6 border-t border-gray-200 text-gray-500 text-sm">
+            <p>&copy; 2026 Media Hub. Automatically curated from registered portals.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Newspaper Database
+            const mediaData = [
+                {
+                    id: "bn-news",
+                    title: "জাতীয় দৈনিক পত্রিকা (অনলাইন)",
+                    color: "border-green-600",
+                    links: [
+                        { name: "প্রথম আলো", url: "https://www.prothomalo.com" },
+                        { name: "বাংলাদেশ প্রতিদিন", url: "https://www.bd-pratidin.com" },
+                        { name: "কালের কণ্ঠ", url: "https://www.kalerkantho.com" },
+                        { name: "যুগান্তর", url: "https://www.jugantor.com" },
+                        { name: "ইত্তেফাক", url: "https://www.ittefaq.com.bd" },
+                        { name: "সমকাল", url: "https://samakal.com" },
+                        { name: "জনকণ্ঠ", url: "https://www.dailyjanakantha.com" },
+                        { name: "আমার সংবাদ", url: "https://www.amarsangbad.com" },
+                        { name: "আমাদের সময়", url: "https://www.dainikamadershomoy.com" },
+                        { name: "দৈনিক বাংলা", url: "https://www.dainikbangla.com.bd" },
+                        { name: "মানবজমিন", url: "https://mzamin.com" },
+                        { name: "নয়া দিগন্ত", url: "https://www.dailynayadiganta.com" },
+                        { name: "ভোরের কাগজ", url: "https://www.bhorerkagoj.com" },
+                        { name: "যায়যায়দিন", url: "https://www.jaijaidin.news" },
+                        { name: "ইনকিলাব", url: "https://www.dailyinqilab.com" },
+                        { name: "কালবেলা", url: "https://www.kalbela.com" },
+                        { name: "দেশ রূপান্তর", url: "https://www.deshrupantor.com" },
+                        { name: "বণিক বার্তা", url: "https://bonikbarta.net" },
+                        { name: "আজকের পত্রিকা", url: "https://www.ajkerpatrika.com" },
+                        { name: "আলোকিত বাংলাদেশ", url: "https://www.alokitobangladesh.com" },
+                        { name: "মানবকণ্ঠ", url: "https://www.manobkantha.com.bd" },
+                        { name: "সংবাদ", url: "https://sangbad.net.bd" },
+                        { name: "খোলা কাগজ", url: "https://kholakagojbd.com" },
+                        { name: "নয়া শতাব্দী", url: "https://nayashatabdibd.com" },
+                        { name: "রূপালী বাংলাদেশ", url: "https://www.rupalibangladesh.com" },
+                        { name: "সময়ের আলো", url: "https://shomoyeralo.com" },
+                        { name: "গণকণ্ঠ", url: "https://gonokantho.com" },
+                        { name: "স্বদেশ প্রতিদিন", url: "https://swadeshpratidin.com" },
+                        { name: "প্রতিদিনের সংবাদ", url: "https://protidinersangbad.com" },
+                        { name: "আমাদের নতুন সময়", url: "https://amadernotunshomoy.com" },
+                        { name: "বাংলাদেশের খবর", url: "https://www.bangladesherkhabor.net" },
+                        { name: "আলোকিত সকাল", url: "https://dailyalokitosakal.net" },
+                        { name: "বাংলাদেশ বুলেটিন", url: "https://bd-bulletin.com" },
+                        { name: "প্রতিদিনের বাংলাদেশ", url: "https://www.protidinerbangladesh.com" },
+                        { name: "আমার দেশ", url: "https://www.dailyamardesh.com" },
+                        { name: "ডেল্টা টাইমস", url: "https://deltatimes24.com" }
+                    ]
+                },
+                {
+                    id: "bn-epaper",
+                    title: "জনপ্রিয় ই-পেপার (e-Papers)",
+                    color: "border-blue-600",
+                    links: [
+                        { name: "ই-প্রথম আলো", url: "https://epaper.prothomalo.com" },
+                        { name: "ই-সমকাল", url: "https://epaper.samakal.com" },
+                        { name: "ই-যুগান্তর", url: "https://epaper.jugantor.com" },
+                        { name: "ই-ইত্তেফাক", url: "https://epaper.ittefaq.com.bd" },
+                        { name: "ই-কালের কণ্ঠ", url: "https://www.ekalerkantho.com" },
+                        { name: "ই-বাংলাদেশ প্রতিদিন", url: "https://www.ebdpratidin.com" },
+                        { name: "ই-আমার সংবাদ", url: "https://epaper.amarsangbad.com" },
+                        { name: "ই-দৈনিক বাংলা", url: "https://epaper.dainikbangla.com.bd" },
+                        { name: "ই-জনকণ্ঠ", url: "https://epaper.dailyjanakantha.com" },
+                        { name: "ই-ইনকিলাব", url: "https://epaper.dailyinqilab.com" },
+                        { name: "ই-মানবজমিন", url: "https://mzamin.com/printversion.php" },
+                        { name: "ই-নয়া দিগন্ত", url: "https://www.enayadiganta.com" },
+                        { name: "ই-ভোরের কাগজ", url: "https://epaper.bhorerkagoj.com" },
+                        { name: "ই-যায়যায়দিন", url: "https://epaper.jaijaidin.news" },
+                        { name: "ই-কালবেলা", url: "https://epaper.kalbela.com" },
+                        { name: "ই-দেশ রূপান্তর", url: "https://epaper.deshrupantor.com" },
+                        { name: "ই-বণিক বার্তা", url: "https://epaper.bonikbarta.net" },
+                        { name: "ই-আজকের পত্রিকা", url: "https://epaper.ajkerpatrika.com" },
+                        { name: "ই-মানবকণ্ঠ", url: "https://epaper.manobkantha.com.bd" },
+                        { name: "ই-সংবাদ", url: "https://epaper.sangbad.net.bd" },
+                        { name: "ই-খোলা কাগজ", url: "https://epaper.kholakagojbd.com" },
+                        { name: "ই-নয়া শতাব্দী", url: "https://epaper.dailynayashatabdi.com" },
+                        { name: "ই-সময়ের আলো", url: "https://epaper.shomoyeralo.com" },
+                        { name: "ই-গণকণ্ঠ", url: "https://egonokantho.com" },
+                        { name: "ই-স্বদেশ প্রতিদিন", url: "https://epaper.swadeshpratidin.com" },
+                        { name: "ই-প্রতিদিনের সংবাদ", url: "https://epaper.protidinersangbad.com" },
+                        { name: "ই-আমাদের নতুন সময়", url: "https://amadernotunshomoy.com/epaper" },
+                        { name: "ই-আলোকিত সকাল", url: "https://ealokitosakal.net" },
+                        { name: "ই-প্রতিদিনের বাংলাদেশ", url: "https://epaper.protidinerbangladesh.com" }
+                    ]
+                },
+                {
+                    id: "en-news",
+                    title: "English Dailies",
+                    color: "border-gray-700",
+                    links: [
+                        { name: "The Daily Star", url: "https://www.thedailystar.net" },
+                        { name: "Dhaka Tribune", url: "https://www.dhakatribune.com" },
+                        { name: "The Business Standard", url: "https://www.tbsnews.net" },
+                        { name: "The Financial Express", url: "https://thefinancialexpress.com.bd" },
+                        { name: "Daily Sun", url: "https://www.daily-sun.com" },
+                        { name: "New Age", url: "https://www.newagebd.net" },
+                        { name: "The Daily Observer", url: "https://www.observerbd.com" },
+                        { name: "Bangladesh Post", url: "https://bangladeshpost.net" },
+                        { name: "Muslim Times", url: "https://muslimtimes.com.bd" },
+                        { name: "The Country Today", url: "https://dailycountrytodaybd.com" }
+                    ]
+                },
+                {
+                    id: "online-portals",
+                    title: "Online News Portals (BD)",
+                    color: "border-purple-600",
+                    links: [
+                        { name: "bdnews24", url: "https://bdnews24.com" },
+                        { name: "Banglanews24", url: "https://www.banglanews24.com" },
+                        { name: "Jago News 24", url: "https://www.jagonews24.com" },
+                        { name: "Rising BD", url: "https://www.risingbd.com" },
+                        { name: "Dhaka Post", url: "https://www.dhakapost.com" },
+                        { name: "Dhaka Mail", url: "https://dhakamail.com" },
+                        { name: "Sara Bangla", url: "https://sarabangla.net" },
+                        { name: "The Daily Campus", url: "https://thedailycampus.com" },
+                        { name: "The Dhaka News", url: "https://thedhakanews.com" },
+                        { name: "Barta24", url: "https://barta24.com" },
+                        { name: "Barta Bazar", url: "https://bartabazar.com" },
+                        { name: "Dhaka Prokash", url: "https://dhakaprokash24.com" },
+                        { name: "Jago Bulletin", url: "https://jagobulletin.com" }
+                    ]
+                },
+                {
+                    id: "intl-news",
+                    title: "International Media",
+                    color: "border-red-600",
+                    links: [
+                        { name: "BBC News", url: "https://www.bbc.com" },
+                        { name: "CNN", url: "https://edition.cnn.com" },
+                        { name: "Al Jazeera", url: "https://www.aljazeera.com" },
+                        { name: "Reuters", url: "https://www.reuters.com" },
+                        { name: "The New York Times", url: "https://www.nytimes.com" }
+                    ]
+                }
+            ];
+
+            const mainContainer = document.getElementById('main-content');
+            const searchInput = document.getElementById('searchInput');
+
+            function renderPage(data) {
+                mainContainer.innerHTML = '';
+                let hasResults = false;
+
+                data.forEach(section => {
+                    if (section.links.length === 0) return;
+
+                    hasResults = true;
+                    
+                    // Create Section Header
+                    const sectionDiv = document.createElement('section');
+                    sectionDiv.className = 'mb-10';
+                    sectionDiv.innerHTML = `
+                        <h2 class="text-lg font-bold border-b-2 ${section.color} mb-4 pb-1 text-gray-700 uppercase tracking-wide">
+                            ${section.title}
+                        </h2>
+                    `;
+
+                    // Create Grid
+                    const gridDiv = document.createElement('div');
+                    gridDiv.className = 'grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4';
+
+                    section.links.forEach(link => {
+                        const linkEl = document.createElement('a');
+                        linkEl.href = link.url;
+                        linkEl.target = "_blank";
+                        linkEl.className = "media-card bg-gray-50 border border-gray-100 p-3 rounded flex items-center space-x-3 hover:bg-white hover:border-gray-300 group text-decoration-none";
+                        linkEl.innerHTML = `
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=${link.url}" 
+                                 class="logo-box opacity-80 group-hover:opacity-100" 
+                                 alt="icon"
+                                 onerror="this.style.display='none'">
+                            <span class="text-sm font-medium text-gray-700 group-hover:text-black truncate w-full block">${link.name}</span>
+                        `;
+                        gridDiv.appendChild(linkEl);
+                    });
+
+                    sectionDiv.appendChild(gridDiv);
+                    mainContainer.appendChild(sectionDiv);
+                });
+
+                if (!hasResults) {
+                    mainContainer.innerHTML = `<div class="text-center text-gray-400 py-10">কোন ফলাফল পাওয়া যায়নি</div>`;
+                }
+            }
+
+            // Initial Render
+            renderPage(mediaData);
+
+            // Search Filter
+            searchInput.addEventListener('keyup', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                
+                const filteredData = mediaData.map(section => {
+                    return {
+                        ...section,
+                        links: section.links.filter(link => 
+                            link.name.toLowerCase().includes(query)
+                        )
+                    };
+                });
+                renderPage(filteredData);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Contact List | BD Media Hub</title>
+    
+    <meta name="description" content="Contact email addresses of Bangladeshi Newspapers, English Dailies, and Online Portals for press releases and editorials.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body { background-color: #f3f4f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* Custom Scrollbar for Cards */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .contact-card { transition: transform 0.2s, box-shadow 0.2s; }
+        .contact-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        
+        /* Copy Tooltip */
+        .tooltip { position: relative; display: inline-block; }
+        .tooltip .tooltiptext {
+            visibility: hidden; width: 60px; background-color: #333; color: #fff;
+            text-align: center; border-radius: 4px; padding: 4px 0; position: absolute;
+            z-index: 1; bottom: 125%; left: 50%; margin-left: -30px; opacity: 0; transition: opacity 0.3s; font-size: 10px;
+        }
+        .tooltip .tooltiptext::after {
+            content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+            border-width: 5px; border-style: solid; border-color: #333 transparent transparent transparent;
+        }
+        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+
+        /* Main Container */
+        .box-layout-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box-layout-container">
+        
+        <header class="bg-gradient-to-r from-emerald-800 to-emerald-900 text-white p-6 shadow-md sticky top-0 z-50">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-4 md:mb-0">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <h1 class="text-2xl md:text-3xl font-bold flex items-center justify-center md:justify-start">
+                        <i class="fas fa-newspaper mr-3 text-emerald-300"></i>BD Media Hub
+                    </h1>
+                    <p class="text-xs text-emerald-100 opacity-80 mt-1 tracking-wide">Your Gateway to Global & Local News</p>
+                </div>
+
+                            <nav>
+                    <ul class="flex space-x-6 text-sm font-medium bg-emerald-800/50 px-6 py-2 rounded-full border border-emerald-700/50 backdrop-blur-sm">
+                        <li><a href="index.html" class="hover:text-emerald-200 transition flex items-center"><i class="fas fa-home mr-2"></i>Home</a></li>
+                        <li><a href="mail.html" class="text-emerald-200 flex items-center"><i class="fas fa-address-book mr-2"></i>Media Contact Directory</a></li>
+                        <li><a href="https://forms.gle/48dndg9XrDGk8JSr5" class="text-emerald-200 flex items-center"><i class="fas fa-address-book mr-2"></i>Submit Newspaper</a></li>
+                    </ul>
+                </nav>
+
+            </div>
+        </header>
+
+        <main class="flex-grow p-4 md:p-8 bg-gray-50">
+            
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-3">Media Contact Directory</h2>
+                    <p class="text-gray-500 mb-8">নিবন্ধ, কলাম এবং সংবাদ বিজ্ঞপ্তি পাঠানোর জন্য প্রয়োজনীয় ইমেইল ঠিকানা</p>
+                    
+                    <div class="max-w-lg mx-auto relative group">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-emerald-600">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" id="contactSearch" placeholder="পত্রিকা খুঁজুন (যেমন: প্রথম আলো, The Daily Star)..." 
+                            class="w-full py-3 pl-10 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm transition-all group-hover:shadow-md">
+                    </div>
+                </div>
+
+                <div id="contact-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+            </div>
+
+        </main>
+
+        <footer class="bg-white text-center py-6 border-t border-gray-200 text-gray-500 text-sm">
+            <p>&copy; 2026 BD Media Hub. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Database of Emails
+        const contactCategories = [
+            {
+                title: "সম্পাদকীয় ও নিবন্ধ (Editorial)",
+                icon: "fa-pen-nib",
+                color: "border-emerald-600",
+                badgeColor: "bg-emerald-100 text-emerald-700",
+                emails: [
+                    { name: "প্রথম আলো", mail: "editorial@prothomalo.com" },
+                    { name: "বাংলাদেশ প্রতিদিন", mail: "example@bd-pratidin.com" }, // Placeholder added
+                    { name: "কালের কণ্ঠ", mail: "editorial@kalerkantho.com" },
+                    { name: "যুগান্তর", mail: "editorial.jugantor@gmail.com" },
+                    { name: "ইত্তেফাক", mail: "columnittefaq@gmail.com" },
+                    { name: "সমকাল", mail: "samakal.editorial@gmail.com" },
+                    { name: "জনকণ্ঠ", mail: "janakanthaeditorial@gmail.com" },
+                    { name: "আমার সংবাদ", mail: "dailyamarsangbad@gmail.com" },
+                    { name: "আমাদের সময়", mail: "amadershomoyeditorial@gmail.com" },
+                    { name: "দৈনিক বাংলা", mail: "editordainikbangla@gmail.com" },
+                    { name: "মানবজমিন", mail: "editorial@mzamin.com" }, 
+                    { name: "নয়াদিগন্ত", mail: "editorialdiganta@gmail.com" },
+                    { name: "ভোরের কাগজ", mail: "bkeditorial@yahoo.com" },
+                    { name: "যায়যায়দিন", mail: "ss_opinion@yahoo.com" },
+                    { name: "ইনকিলাব", mail: "inqilab.info@gmail.com" },
+                    { name: "কালবেলা", mail: "editorial.kalbela@gmail.com" },
+                    { name: "দেশ রূপান্তর", mail: "editorial@deshrupantor.com" },
+                    { name: "বণিক বার্তা", mail: "editorial@bonikbarta.com" },
+                    { name: "আজকের পত্রিকা", mail: "editorial@ajkerpatrika.com" },
+                    { name: "আলোকিত বাংলাদেশ", mail: "editorial.alokitobangladesh@gmail.com" },
+                    { name: "মানবকণ্ঠ", mail: "editorial.manobkantha@gmail.com" },
+                    { name: "সংবাদ", mail: "editorial.sangbad@gmail.com" },
+                    { name: "খোলা কাগজ", mail: "kholakagojed2@gmail.com" },
+                    { name: "খবরের কাগজ", mail: "editorial.khaborerkagoj@gmail.com" },
+                    { name: "সময়ের আলো", mail: "editorial@shomoyeralo.com" },
+                    { name: "প্রতিদিনের বাংলাদেশ", mail: "mohonapb@gmail.com" },
+                    { name: "প্রতিদিনের সংবাদ", mail: "pdsangbadeditorial@gmail.com" },
+                    { name: "বাংলাদেশের খবর", mail: "bk2018editorial@gmail.com" },
+                    { name: "বাংলাদেশ বুলেটিন", mail: "thebdbulletin@gmail.com" },
+                    { name: "স্বদেশ প্রতিদিন", mail: "swadeshnewsbd24@gmail.com" },
+                    { name: "ডেল্টা টাইমস", mail: "deltatimes24@gmail.com" },
+                    // Missing from user list, added with Placeholders
+                    { name: "নয়া শতাব্দী", mail: "example@nayashatabdi.com" },
+                    { name: "রূপালী বাংলাদেশ", mail: "example@rupalibangladesh.com.bd" },
+                    { name: "গণকণ্ঠ", mail: "example@gonokantho.com" },
+                    { name: "আমাদের নতুন সময়", mail: "example@amadernotunshomoy.com" },
+                    { name: "আলোকিত সকাল", mail: "example@alokitosakal.com" },
+                    { name: "আমার দেশ", mail: "example@amardesh.com" },
+                    // Other Newspapers from user list
+                    { name: "আজকালের খবর", mail: "editorialajkalerkhobor@gmail.com" },
+                    { name: "জনবাণী", mail: "dailyjanobanibd@gmail.com" },
+                    { name: "বর্তমান", mail: "wo.bartoman@gmail.com" },
+                    { name: "পূর্বকোণ", mail: "editorial@dainikpurbokone.net" },
+                    { name: "আজাদী", mail: "azadieditorial@gmail.com" },
+                    { name: "করতোয়া", mail: "dkaratoa@yahoo.com" },
+                    { name: "সুপ্রভাত", mail: "news@suprobhat.com" },
+                    { name: "দিনকাল", mail: "dinkalnews@gmail.com" },
+                    { name: "দেশের কথা", mail: "dainikdesherkantha@gmail.com" },
+                    { name: "দেশের কণ্ঠ", mail: "desherkanthaeditorial@gmail.com" },
+                    { name: "দেশকাল", mail: "editorial@deshkalbd.com" },
+                    { name: "শেয়ার বিজ", mail: "editorial.sharebiz@gmail.com" },
+                    { name: "বিজনেস বাংলাদেশ", mail: "biznessbangladesh@gmail.com" },
+                    { name: "আমার বার্তা", mail: "editorialamarbarta@gmail.com" },
+                    { name: "সকালের সময়", mail: "dailysokalersomoy@gmail.com" },
+                    { name: "বাংলাদেশের আলো", mail: "bangladesheralo2018@gmail.com" },
+                    { name: "জবাবদিহি", mail: "dailyjobabdihi@gmail.com" },
+                    { name: "লাখোকণ্ঠ", mail: "dailylakhokontho@gmail.com" },
+                    { name: "এশিয়া বাণী", mail: "dailyasiabani2012@gmail.com" },
+                    { name: "সবুজ বাংলা", mail: "sabujcountry@gmail.com" }
+                ]
+            },
+            {
+                title: "ইংরেজি পত্রিকা (English Dailies)",
+                icon: "fa-globe",
+                color: "border-blue-600",
+                badgeColor: "bg-blue-100 text-blue-700",
+                emails: [
+                    { name: "The Daily Star", mail: "dsliteditor@gmail.com" },
+                    { name: "The Daily Sun", mail: "suneditorial@gmail.com" },
+                    { name: "The Business Standard", mail: "oped.tbs@gmail.com" },
+                    { name: "The Financial Express", mail: "fexpress68@gmail.com" },
+                    { name: "New Age", mail: "op-ed@newagebd.net" },
+                    { name: "The Daily Observer", mail: "editorial@dailyobserverbd.com" },
+                    { name: "The Bangladesh Post", mail: "editorial@bangladeshpost.net" },
+                    { name: "The Independent", mail: "editorial@theindependentbd.com" },
+                    { name: "The New Nation", mail: "n_editor@bangla.net" },
+                    { name: "The Asian Age", mail: "editorial.dailyasianage@gmail.com" },
+                    { name: "The Bangladesh Today", mail: "editorial@thebangladeshtoday.com" },
+                    { name: "Muslim Times", mail: "muslimtimes19@gmail.com" },
+                    { name: "The Perspective", mail: "perspectivedesk@gmail.com" }
+                ]
+            },
+            {
+                title: "অনলাইন পোর্টাল (Online Portals)",
+                icon: "fa-wifi",
+                color: "border-red-500",
+                badgeColor: "bg-red-100 text-red-700",
+                emails: [
+                    { name: "জাগো নিউজ", mail: "jagofeature@gmail.com" },
+                    { name: "রাইজিং বিডি", mail: "risingbdcampus@gmail.com" },
+                    { name: "বার্তা ২৪", mail: "barta.newsroom@gmail.com" },
+                    { name: "সারা বাংলা", mail: "sarabangla.muktomot@gmail.com" },
+                    { name: "দ্য ডেইলি ক্যাম্পাস", mail: "news@thedailycampus.com" },
+                    { name: "বাংলাদেশ জার্নাল", mail: "bdjournalnews@gmail.com" },
+                    { name: "বার্তা বাজার", mail: "bartabazarbd@gmail.com" },
+                    { name: "আওয়ার নিউজ বিডি", mail: "info@ournewsbd.com" },
+                    { name: "ক্যাম্পাস টাইমস", mail: "campustimes77@gmail.com" },
+                    { name: "দ্য রাইজিং ক্যাম্পাস", mail: "newseditor.trc@gmail.com" },
+                    { name: "তরঙ্গ নিউজ", mail: "torrongonews@gmail.com" },
+                    { name: "ডে নাইট নিউজ", mail: "daynightnews2015@gmail.com" },
+                    { name: "দৈনিক শিক্ষা", mail: "dainikshiksha@gmail.com" },
+                    { name: "এমটি নিউজ২৪", mail: "mtnews01@gmail.com" },
+                    { name: "জুম বাংলা", mail: "zoombanglareports@gmail.com" },
+                    { name: "নাগরিক সংবাদ", mail: "ns@prothomalo.com" }
+                ]
+            },
+            {
+                title: "সাহিত্য পাতা (Literature)",
+                icon: "fa-feather-alt",
+                color: "border-purple-600",
+                badgeColor: "bg-purple-100 text-purple-700",
+                emails: [
+                    { name: "ইত্তেফাক (সাময়িকী)", mail: "lite.ittefaq@gmail.com" },
+                    { name: "সমকাল (কালের খেয়া)", mail: "kalerkheya.samakal@gmail.com" },
+                    { name: "কালের কণ্ঠ (শিলালিপি)", mail: "shilalipi@kalerkantho.com" },
+                    { name: "যুগান্তর (সাহিত্য)", mail: "shahittojugantor@gmail.com" },
+                    { name: "কালবেলা (কালান্তর)", mail: "kalantor.kalbela@gmail.com" },
+                    { name: "ভোরের কাগজ (সাহিত্য)", mail: "bkagojliterary@gmail.com" },
+                    { name: "নয়া দিগন্ত (সাহিত্য)", mail: "digantasahitto@gmail.com" },
+                    { name: "ইনকিলাব (সাহিত্য)", mail: "inqilabshahitto@gmail.com" },
+                    { name: "প্রথম আলো (বন্ধুসভা)", mail: "bondhushava@prothom-alo.info" },
+                    { name: "খবরের কাগজ (সুবর্ণরেখা)", mail: "subarnorekha.kk@gmail.com" },
+                    { name: "প্রতিদিনের বাংলাদেশ (ধানসিঁড়ি)", mail: "dhansiripb@gmail.com" },
+                    { name: "আলোকিত বাংলাদেশ", mail: "alokitoshamoiki@gmail.com" },
+                    { name: "সংবাদ (সাহিত্য)", mail: "sangbadsamoeky@gmail.com" },
+                    { name: "খোলা কাগজ (ইচ্ছেডানা)", mail: "icchedana.kk@gmail.com" },
+                    { name: "মানবজমিন (কবিতা)", mail: "shahitto@manobkantha.com" },
+                    { name: "জনকণ্ঠ (ঝিলিমিলি)", mail: "jilimilijanakantha@yahoo.com" }
+                ]
+            },
+            {
+                title: "ফিচার ও লাইফস্টাইল (Lifestyle)",
+                icon: "fa-coffee",
+                color: "border-orange-500",
+                badgeColor: "bg-orange-100 text-orange-700",
+                emails: [
+                    { name: "সমকাল (শৈলী)", mail: "shoily.samakal@gmail.com" },
+                    { name: "ইত্তেফাক (কড়চা)", mail: "korcha.ittefaq@gmail.com" },
+                    { name: "কালের কণ্ঠ (A2Z)", mail: "a2z@kalerkantho.com" },
+                    { name: "প্রথম আলো (আধুনা)", mail: "adhuna@prothom-alo.info" },
+                    { name: "প্রতিদিনের বাংলাদেশ (চিত্রা)", mail: "chitra.pb23@gmail.com" },
+                    { name: "খবরের কাগজ (ফ্যাশন)", mail: "fashionplus.kk@gmail.com" },
+                    { name: "যুগান্তর (ঘরে-বাইরে)", mail: "feature@jugantor.com" },
+                    { name: "আমাদের সময় (যাপিত)", mail: "japitoshomoy@gmail.com" },
+                    { name: "যায়যায়দিন (নন্দিনী)", mail: "nandini@jjdbd.com" },
+                    { name: "প্রতিদিনের বাংলাদেশ (আগুনমুখা)", mail: "agunmukha.pb@gmail.com" }
+                ]
+            },
+            {
+                title: "ক্যাম্পাস পাতা (Campus)",
+                icon: "fa-graduation-cap",
+                color: "border-indigo-600",
+                badgeColor: "bg-indigo-100 text-indigo-700",
+                emails: [
+                    { name: "সমকাল (ঘাসফড়িং)", mail: "priyocampus1971@gmail.com" },
+                    { name: "ইত্তেফাক", mail: "campus.ittefaq@gmail.com" },
+                    { name: "জনকণ্ঠ", mail: "janakanthacampus@gmail.com" },
+                    { name: "যুগান্তর (স্বজন)", mail: "shojonshomabesh@gmail.com" },
+                    { name: "আজকের পত্রিকা", mail: "edu@ajkerpatrika.com" },
+                    { name: "কালবেলা", mail: "feature.kalbela@gmail.com" },
+                    { name: "যায়যায়দিন", mail: "campus@jjdbd.com" },
+                    { name: "খবরের কাগজ", mail: "campus.kkagoj@gmail.com" },
+                    { name: "আমাদের সময়", mail: "campusshomoy2003@gmail.com" },
+                    { name: "প্রতিদিনের বাংলাদেশ", mail: "alokdiyapb@gmail.com" },
+                    { name: "খোলা কাগজ", mail: "kholakagojcampus@gmail.com" },
+                    { name: "প্রতিদিনের সংবাদ", mail: "pdscampus@gmail.com" }
+                ]
+            },
+            {
+                title: "ইসলামিক পাতা (Islamic Life)",
+                icon: "fa-mosque",
+                color: "border-teal-600",
+                badgeColor: "bg-teal-100 text-teal-700",
+                emails: [
+                    { name: "কালের কণ্ঠ", mail: "islamijibon@kalerkantho.com" },
+                    { name: "নয়া দিগন্ত", mail: "ndislamicjibon@gmail.com" },
+                    { name: "ইত্তেফাক", mail: "dharmochinta63@gmail.com" },
+                    { name: "যুগান্তর", mail: "islam.jugantor@gmail.com" },
+                    { name: "ইনকিলাব", mail: "islamijibonpata@gmail.com" },
+                    { name: "সময়ের আলো", mail: "islameralo@shomoyeralo.com" },
+                    { name: "আলোকিত বাংলাদেশ", mail: "abislamosomaj@gmail.com" },
+                    { name: "দেশ রূপান্তর", mail: "features@deshrupantor.com" },
+                    { name: "আমার সংবাদ", mail: "amarsangbadfeature@gmail.com" },
+                    { name: "মানবকণ্ঠ", mail: "islamojibonmk@gmail.com" },
+                    { name: "বাংলাদেশ খবর", mail: "mahfuuz51@gmail.com" }
+                ]
+            },
+            {
+                title: "রম্য ও শিশু-কিশোর (Fun & Kids)",
+                icon: "fa-laugh-beam",
+                color: "border-pink-500",
+                badgeColor: "bg-pink-100 text-pink-700",
+                emails: [
+                    { name: "প্রথম আলো (রস+আলো)", mail: "ra@prothom-alo.info" },
+                    { name: "কালের কণ্ঠ (ঘোড়ার ডিম)", mail: "ghorardim@kalerkantho.com" },
+                    { name: "যুগান্তর (বিচ্ছু)", mail: "bicchoojugantor@gmail.com" },
+                    { name: "নয়াদিগন্ত (থেরাপি)", mail: "therapi2016@gmail.com" },
+                    { name: "খবরের কাগজ (রঙ্গবঙ্গ)", mail: "rongobango.kk@gmail.com" },
+                    { name: "প্রতিদিনের সংবাদ (রঙ্গব্যঙ্গ)", mail: "pds.rangobango@gmail.com" },
+                    { name: "বাংলাদেশ প্রতিদিন (ডাংগুলি)", mail: "danguli71@gmail.com" },
+                    { name: "ইত্তেফাক (কচিকাঁচার আসর)", mail: "kochikacharaashor@gmail.com" },
+                    { name: "যায়যায়দিন (হাট্টিমাটিম)", mail: "hattimatimtim@jjdbd.com" },
+                    { name: "সংবাদ (খেলাঘর)", mail: "sangbadkhelaghar@gmail.com" },
+                    { name: "ভোরের কাগজ (ইষ্টিকুটুম)", mail: "istikutum_bkagoj@yahoo.com" },
+                    { name: "কিশোর কণ্ঠ", mail: "kishorkantha@yahoo.com" }
+                ]
+            }
+        ];
+
+        // Function to copy email
+        function copyToClipboard(email, btnId) {
+            navigator.clipboard.writeText(email).then(() => {
+                const tooltip = document.getElementById(btnId);
+                tooltip.innerHTML = "Copied!";
+                tooltip.style.visibility = "visible";
+                tooltip.style.opacity = "1";
+                
+                setTimeout(() => {
+                    tooltip.innerHTML = "Copy";
+                    tooltip.style.visibility = "hidden";
+                    tooltip.style.opacity = "0";
+                }, 1500);
+            });
+        }
+
+        // Render Function
+        const container = document.getElementById('contact-container');
+
+        function renderContacts(filterText = '') {
+            container.innerHTML = '';
+            
+            contactCategories.forEach((category, catIndex) => {
+                // Filter logic
+                const filteredEmails = category.emails.filter(item => 
+                    item.name.toLowerCase().includes(filterText.toLowerCase()) || 
+                    category.title.toLowerCase().includes(filterText.toLowerCase())
+                );
+
+                if (filteredEmails.length > 0) {
+                    const card = document.createElement('div');
+                    card.className = `contact-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full`;
+                    
+                    let emailListHtml = '';
+                    filteredEmails.forEach((item, index) => {
+                        const uniqueId = `tooltip-${catIndex}-${index}`;
+                        const isPlaceholder = item.mail.startsWith('example@');
+                        const mailDisplay = isPlaceholder ? '<span class="text-gray-400 italic">Email not available</span>' : item.mail;
+                        
+                        emailListHtml += `
+                            <div class="flex justify-between items-center py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 px-5 transition-colors">
+                                <div class="overflow-hidden">
+                                    <h4 class="text-sm font-bold text-gray-700 truncate">${item.name}</h4>
+                                    <a href="${isPlaceholder ? '#' : 'mailto:' + item.mail}" class="text-xs ${isPlaceholder ? 'text-gray-400 cursor-default' : 'text-emerald-600 hover:text-emerald-800 hover:underline'} block truncate" title="${item.mail}">${mailDisplay}</a>
+                                </div>
+                                ${!isPlaceholder ? `
+                                <button onclick="copyToClipboard('${item.mail}', '${uniqueId}')" class="tooltip ml-3 text-gray-400 hover:text-emerald-600 transition p-2 bg-white rounded-full shadow-sm hover:shadow border border-gray-100">
+                                    <i class="far fa-copy"></i>
+                                    <span class="tooltiptext" id="${uniqueId}">Copy</span>
+                                </button>` : ''}
+                            </div>
+                        `;
+                    });
+
+                    card.innerHTML = `
+                        <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-white relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 h-full ${category.badgeColor.replace('text', 'bg').split(' ')[0]}"></div>
+                            <h3 class="font-bold text-gray-800 flex items-center z-10">
+                                <span class="w-8 h-8 rounded-full ${category.badgeColor} flex items-center justify-center mr-3 text-xs">
+                                    <i class="fas ${category.icon}"></i>
+                                </span>
+                                ${category.title}
+                            </h3>
+                            <span class="text-xs font-bold ${category.badgeColor} px-2 py-1 rounded-md">${filteredEmails.length}</span>
+                        </div>
+                        <div class="custom-scroll overflow-y-auto max-h-96 flex-grow bg-white">
+                            ${emailListHtml}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+
+            if (container.innerHTML === '') {
+                container.innerHTML = `<div class="col-span-full text-center py-20 text-gray-400 flex flex-col items-center">
+                    <i class="fas fa-search text-4xl mb-4 text-gray-200"></i>
+                    <span>কোন ফলাফল পাওয়া যায়নি</span>
+                </div>`;
+            }
+        }
+
+        // Initial Render
+        renderContacts();
+
+        // Search Event Listener
+        document.getElementById('contactSearch').addEventListener('keyup', (e) => {
+            renderContacts(e.target.value);
+        });
+
+    </script>
+</body>
+</html>
