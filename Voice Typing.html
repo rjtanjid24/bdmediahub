@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangla Voice Typing | BD Media Hub</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Hind Siliguri', sans-serif; background-color: #f8fafc; }
+        
+        /* Mic Animation */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.33); }
+            80%, 100% { opacity: 0; }
+        }
+        .pulse-ring { animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+        
+        textarea { resize: none; outline: none; transition: 0.2s; }
+        textarea:focus { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1); }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center text-emerald-800">
+                <i class="fas fa-microphone-alt text-2xl mr-2 text-red-500"></i>
+                <div>
+                    <h1 class="text-xl font-bold leading-none">BD Media Hub</h1>
+                    <p class="text-xs text-gray-500">Voice Typing Tool</p>
+                </div>
+            </div>
+            <a href="index.html" class="text-gray-600 hover:text-emerald-600 text-sm font-medium transition">
+                <i class="fas fa-home mr-1"></i> Home
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto p-4 md:p-8 min-h-[85vh] flex flex-col justify-center">
+        
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">বাংলা ভয়েস টাইপিং</h2>
+            <p class="text-gray-500">নিচের মাইক্রোফোনে ক্লিক করে কথা বলুন, লেখা হয়ে যাবে।</p>
+        </div>
+
+        <div class="flex flex-col items-center justify-center mb-8">
+            <button id="btn-mic" class="relative w-20 h-20 bg-white border-2 border-red-500 rounded-full flex items-center justify-center text-red-500 hover:bg-red-50 transition shadow-lg focus:outline-none group">
+                <span id="mic-pulse" class="absolute w-full h-full rounded-full bg-red-500 opacity-20 hidden"></span>
+                <i class="fas fa-microphone text-3xl group-hover:scale-110 transition"></i>
+            </button>
+            <p id="status-text" class="mt-4 text-sm font-medium text-gray-400">টাইপ করতে ক্লিক করুন</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden relative">
+            <textarea id="textBox" class="w-full h-64 p-6 text-xl text-gray-800 leading-relaxed" 
+                placeholder="আপনার কথা এখানে লেখা হবে..."></textarea>
+            
+            <div class="bg-gray-50 p-4 border-t border-gray-100 flex justify-between items-center">
+                <div class="text-xs text-gray-400 hidden md:block">
+                    <i class="fas fa-info-circle mr-1"></i> গুগল ক্রোম ব্রাউজার রিকমেন্ডেড
+                </div>
+                <div class="flex space-x-3 w-full md:w-auto justify-end">
+                    <button onclick="clearBox()" class="px-4 py-2 rounded-lg text-red-500 hover:bg-red-50 text-sm font-bold transition">
+                        <i class="fas fa-trash-alt mr-2"></i>মুছে ফেলুন
+                    </button>
+                    <button onclick="copyText()" class="px-6 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md transition flex items-center">
+                        <i class="far fa-copy mr-2"></i>কপি করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center py-6 text-gray-400 text-xs border-t bg-white">
+        &copy; 2026 BD Media Hub. Powered by Web Speech API.
+    </footer>
+
+    <script>
+        const btnMic = document.getElementById('btn-mic');
+        const micPulse = document.getElementById('mic-pulse');
+        const statusText = document.getElementById('status-text');
+        const textBox = document.getElementById('textBox');
+        let recognition;
+        let isRecording = false;
+
+        // Check Browser Support
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'bn-BD'; // Bengali Language
+
+            recognition.onstart = () => {
+                isRecording = true;
+                micPulse.classList.remove('hidden');
+                micPulse.classList.add('pulse-ring');
+                btnMic.classList.add('bg-red-500', 'text-white', 'border-transparent');
+                btnMic.classList.remove('bg-white', 'text-red-500');
+                statusText.innerText = "শুনছি... বলুন (Listening...)";
+                statusText.className = "mt-4 text-sm font-bold text-red-500 animate-pulse";
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                micPulse.classList.add('hidden');
+                micPulse.classList.remove('pulse-ring');
+                btnMic.classList.remove('bg-red-500', 'text-white', 'border-transparent');
+                btnMic.classList.add('bg-white', 'text-red-500');
+                statusText.innerText = "টাইপ করতে আবার ক্লিক করুন";
+                statusText.className = "mt-4 text-sm font-medium text-gray-400";
+            };
+
+            recognition.onresult = (event) => {
+                let finalTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript + ' ';
+                    }
+                }
+                if (finalTranscript) {
+                    // Insert text where cursor is or at end
+                    const startPos = textBox.selectionStart;
+                    const endPos = textBox.selectionEnd;
+                    const text = textBox.value;
+                    textBox.value = text.substring(0, startPos) + finalTranscript + text.substring(endPos, text.length);
+                    textBox.focus();
+                    textBox.selectionStart = textBox.selectionEnd = startPos + finalTranscript.length;
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech Error:", event.error);
+                statusText.innerText = "সমস্যা হচ্ছে, আবার চেষ্টা করুন।";
+                recognition.stop();
+            };
+
+            // Mic Button Click Handler
+            btnMic.addEventListener('click', () => {
+                if (isRecording) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            });
+
+        } else {
+            statusText.innerText = "দুঃখিত! আপনার ব্রাউজারে এটি সাপোর্ট করছে না। (Chrome ব্যবহার করুন)";
+            statusText.classList.add('text-red-500');
+            btnMic.disabled = true;
+            btnMic.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        // Utils
+        function clearBox() {
+            if(confirm("আপনি কি সব লেখা মুছে ফেলতে চান?")) {
+                textBox.value = '';
+                statusText.innerText = "লেখা মুছে ফেলা হয়েছে";
+            }
+        }
+
+        function copyText() {
+            if (!textBox.value.trim()) {
+                alert("কপি করার মতো কিছু নেই!");
+                return;
+            }
+            textBox.select();
+            navigator.clipboard.writeText(textBox.value).then(() => {
+                // Visual Feedback
+                const originalText = document.querySelector('button[onclick="copyText()"]').innerHTML;
+                document.querySelector('button[onclick="copyText()"]').innerHTML = '<i class="fas fa-check mr-2"></i>কপি হয়েছে!';
+                setTimeout(() => {
+                    document.querySelector('button[onclick="copyText()"]').innerHTML = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
